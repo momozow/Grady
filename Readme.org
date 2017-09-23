@@ -1,0 +1,13 @@
+* 皇居と筑波大学
+縦の長さは，皇居と同じくらい
+
+[[ImperialPalace.png]]
+
+左側の地図を拡大・移動すれば，同じ倍率で右側に筑波大学の地図が表示される．
+
+* API Key
+
+Google Maps Javascript API を使っています．
+
+[[https://developers.google.com/maps/documentation/javascript/]]
+

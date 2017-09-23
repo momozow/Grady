@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<title>Grady</title>
+	<style>
+	 /* Always set the map height explicitly to define the size of the div
+	  * element that contains the map. */
+	 .map
+	 {
+	     height: 100%;
+             width: 49.8%;
+	 }
+	 #map {float: left}
+	 #mapTsukuba {float: right; color: black}
+	 /* Optional: Makes the sample page fill the window. */
+	 html, body
+	 {
+             height: 100%;
+             margin: 0;
+             padding: 0;
+	 }
+	 body
+	 {
+	     background-color: #606060
+	 }
+	</style>
+    </head>
+    <body>
+	<div class="map" id="map"></div>
+	<div class="map" id="mapTsukuba"></div>
+	<script>
+	 function synchronizeMap(source, target)
+	 {
+	     target.setZoom(source.getZoom());
+	 };
+
+	 function initMap()
+	 {
+             // Create a map object and specify the DOM element for display.
+             var map = new google.maps.Map(document.getElementById('map'), {
+		 center: {lat: 35.684838, lng: 139.753121},
+		 zoom: 14
+             });
+             
+	     var mapTsukuba = new google.maps.Map(document.getElementById('mapTsukuba'), {
+		 center: {lat: 36.105431, lng: 140.1006597},
+		 zoom: 14
+             });
+
+	     google.maps.event.addListener(map, 'idle', function()
+		 {
+		     google.maps.event.addListenerOnce(map, 'zoom_changed', function()
+			 {
+			     synchronizeMap(map, mapTsukuba);
+			 });
+		     
+		     google.maps.event.addListenerOnce(mapTsukuba, 'zoom_changed', function()
+			 {
+			     synchronizeMap(mapTsukuba, map);
+			 });
+		 });
+	 };
+	</script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"
+		async defer></script>
+    </body>
+</html>
