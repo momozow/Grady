@@ -3,15 +3,6 @@
     <head>
 	<title>Grady</title>
 	<style>
-	 /* Always set the map height explicitly to define the size of the div
-	  * element that contains the map. */
-	 .map
-	 {
-	     height: 100%;
-             width: 49.8%;
-	 }
-	 #map {float: left}
-	 #mapTsukuba {float: right; color: black}
 	 /* Optional: Makes the sample page fill the window. */
 	 html, body
 	 {
@@ -24,13 +15,47 @@
 	     background-color: #606060
 	 }
 	</style>
-	<script src="https://fb.me/react-15.2.0.js"></script>
-	<script src="https://fb.me/react-dom-15.2.0.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+	<script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>
+	<script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>
+	<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     </head>
     <body>
-	<div class="map" id="map"></div>
-	<div class="map" id="mapTsukuba"></div>
+	<div id="View" style="height: 100%; min-height: 100%;"></div>
+
+	<script type="text/babel">
+	 class Map extends React.Component
+	 {
+	     renderAMap()
+	     {
+		 return this.props.attributes.map(attr => {
+		     return (<div id={attr.id} style={attr.style}></div>);
+		 });
+	     }
+	     
+	     render()
+	     {
+		 return (this.renderAMap(this.props));
+	     }
+	 }
+	 
+	 class MapContainer extends React.Component
+	 {
+	     constructor()
+	     {
+		 super();
+		 this.state = {numberOfMaps: 2};
+		 this.twomaps = [{id: "map1", style: {height: "100%", width: "49.8%", float: "left"}},
+				 {id: "map2", style: {height: "100%", width: "49.8%", float: "right"}}];
+	     }
+
+	     render()
+	     {
+		 return (<Map attributes={this.twomaps} />);
+	     }
+	 }
+	 	 
+	 ReactDOM.render(<MapContainer />, document.getElementById("View"));
+	</script>
 		
 	<script>
 	 function synchronizeMap(source, target)
@@ -41,26 +66,26 @@
 	 function initMap()
 	 {
              // Create a map object and specify the DOM element for display.
-             var map = new google.maps.Map(document.getElementById('map'), {
+             var map1 = new google.maps.Map(document.getElementById('map1'), {
 		 center: {lat: 35.684838, lng: 139.753121},
 		 zoom: 14
              });
              
-	     var mapTsukuba = new google.maps.Map(document.getElementById('mapTsukuba'), {
+	     var map2 = new google.maps.Map(document.getElementById('map2'), {
 		 center: {lat: 36.105431, lng: 140.1006597},
 		 zoom: 14
              });
-
-	     google.maps.event.addListener(map, 'idle', function()
+	     
+	     google.maps.event.addListener(map1, 'idle', function()
 		 {
-		     google.maps.event.addListenerOnce(map, 'zoom_changed', function()
+		     google.maps.event.addListenerOnce(map1, 'zoom_changed', function()
 			 {
-			     synchronizeMap(map, mapTsukuba);
+			     synchronizeMap(map1, map2);
 			 });
 		     
-		     google.maps.event.addListenerOnce(mapTsukuba, 'zoom_changed', function()
+		     google.maps.event.addListenerOnce(map2, 'zoom_changed', function()
 			 {
-			     synchronizeMap(mapTsukuba, map);
+			     synchronizeMap(map2, map1);
 			 });
 		 });
 	 };
