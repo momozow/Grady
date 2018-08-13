@@ -26,9 +26,21 @@
 	     render()
 	     {
 		 return (
-		     <div name="mapSelector" style={{height: this.props.height}}>
+		     <span name="mapSelector">
 			 <span>S</span><span>S</span><span>S</span><span>S</span>
-		     </div>
+		     </span>
+		 );
+	     }
+	 }
+
+	 class SearchBox extends React.Component
+	 {
+	     render()
+	     {
+		 return (
+		     <span name="searchBox">
+			 <input type="text"></input>
+		     </span>
 		 );
 	     }
 	 }
@@ -42,7 +54,10 @@
 		 return this.props.attributes.map(attr => {
 		     return (
 			 <div style={attr.style}>
-			     <MapSelector height={this.mapSelectorHeight} />
+			     <div name="header" style={{height: this.mapSelectorHeight}}>
+				 <MapSelector />
+				 <SearchBox />
+			     </div>
 			     <div id={attr.id} style={{height: `calc(100% - ${this.mapSelectorHeight})`,
 						       width: "100%"}}></div>
 			 </div>);
