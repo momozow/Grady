@@ -20,15 +20,32 @@
 	<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     </head>
     <body>
-	<div id="View" style="height: 100%; min-height: 100%;"></div>
-
 	<script type="text/babel">
-	 class Map extends React.Component
+	 class MapSelector extends React.Component
+	 {
+	     render()
+	     {
+		 return (
+		     <div name="mapSelector" style={{height: this.props.height}}>
+			 <span>S</span><span>S</span><span>S</span><span>S</span>
+		     </div>
+		 );
+	     }
+	 }
+	 
+	 class MapView extends React.Component
 	 {
 	     renderAMap()
 	     {
+		 this.mapSelectorHeight = "30px";
+		 
 		 return this.props.attributes.map(attr => {
-		     return (<div id={attr.id} style={attr.style}></div>);
+		     return (
+			 <div style={attr.style}>
+			     <MapSelector height={this.mapSelectorHeight} />
+			     <div id={attr.id} style={{height: `calc(100% - ${this.mapSelectorHeight})`,
+						       width: "100%"}}></div>
+			 </div>);
 		 });
 	     }
 	     
@@ -44,17 +61,19 @@
 	     {
 		 super();
 		 this.state = {numberOfMaps: 2};
-		 this.twomaps = [{id: "map1", style: {height: "100%", width: "49.8%", float: "left"}},
-				 {id: "map2", style: {height: "100%", width: "49.8%", float: "right"}}];
+		 this.twomapsHorizontal = [{id: "map1", style: {height: "100%", width: "49.8%", float: "left"}},
+					   {id: "map2", style: {height: "100%", width: "49.8%", float: "right"}}];
+		 this.twomapsVertical = [{id: "map1", style: {height: "50%", width: "100%"}},
+					 {id: "map2", style: {height: "50%", width: "100%"}}];
 	     }
 
 	     render()
 	     {
-		 return (<Map attributes={this.twomaps} />);
+		 return (<MapView attributes={this.twomapsHorizontal} />);
 	     }
 	 }
-	 	 
-	 ReactDOM.render(<MapContainer />, document.getElementById("View"));
+
+	 ReactDOM.render(<MapContainer />, document.getElementsByTagName("body")[0]);
 	</script>
 		
 	<script>
